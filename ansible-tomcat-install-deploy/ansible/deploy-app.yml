@@ -2,7 +2,12 @@
   hosts: ec2_instances
   become: yes
   tasks:
-    - name: Copy WAR file to Tomcat webapps directory
+    - name: Download student.war
+      get_url:
+        url: https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+        dest: "/tmp/student.war"  # Temporary location to download the file
+
+    - name: Move WAR file to Tomcat webapps directory
       copy:
-        src: /path/to/your/app.war
-        dest: /opt/apache-tomcat-9.0.50/webapps/
+        src: "/tmp/student.war"
+        dest: "/opt/apache-tomcat-9.0.50/webapps/"
