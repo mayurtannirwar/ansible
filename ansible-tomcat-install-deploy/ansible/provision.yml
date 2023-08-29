@@ -1,0 +1,27 @@
+- name: Provision AWS VMs
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create EC2 instances
+      ec2:
+        instance_type: t2.micro
+        image: ami-12345678  # Replace with actual image ID
+        key_name: my-key-pair
+        count: 2
+        wait: yes
+        region: us-west-1   # Replace with your desired region
+      register: ec2_instances
+
+    - name: Add instances to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groups: ec2_instances
+      loop: "{{ ec2_instances.instances }}"
+
+    - name: Wait for SSH to be available
+      wait_for_connection:
+        timeout: 300
+
+    - name: Print instance IPs
+      debug:
+        var: hostvars[item].ansible_host

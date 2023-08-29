@@ -1,0 +1,27 @@
+- name: Configure Tomcat on VMs
+  hosts: ec2_instances
+  become: yes
+  tasks:
+    - name: Install Java
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+
+    - name: Download and extract Tomcat
+      get_url:
+        url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.50/bin/apache-tomcat-9.0.50.tar.gz"
+        dest: /opt/
+        mode: '0644'
+      register: tomcat_download
+
+    - name: Extract the Tomcat archive
+      unarchive:
+        src: "/opt/{{ tomcat_download.url.split('/')[-1] }}"
+        dest: /opt/
+        remote_src: yes
+        creates: "/opt/{{ tomcat_download.url.split('/')[-1] | replace('.tar.gz', '') }}"
+
+    - name: Start Tomcat service
+      systemd:
+        name: tomcat
+        enabled: yes
