@@ -5,11 +5,11 @@
     - name: Create EC2 instances
       ec2:
         instance_type: t2.micro
-        image: ami-12345678  # Replace with actual image ID
-        key_name: my-key-pair
+        image: ami-053b0d53c279acc90  # Replace with actual image ID
+        key_name: gan.pem
         count: 2
         wait: yes
-        region: us-west-1   # Replace with your desired region
+        region: us-east-1   # Replace with your desired region
       register: ec2_instances
 
     - name: Add instances to host group
