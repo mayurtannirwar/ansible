@@ -19,9 +19,9 @@
         src: "/opt/{{ tomcat_download.url.split('/')[-1] }}"
         dest: /opt/
         remote_src: yes
-        creates: "/opt/{{ tomcat_download.url.split('/')[-1] | replace('.tar.gz', '') }}"
+        creates: "/opt/apache-tomcat-9.0.50"  # Correct directory name here
 
     - name: Start Tomcat service
       systemd:
-        name: tomcat
+        name: tomcat9  # Use a version-specific service name
         enabled: yes
